@@ -92,6 +92,40 @@ def analyze_data(data):
     else:
         print('File format could not be identified')
 
+    # Define the packet structure according to the protocol
+    packet_structure = {
+        'header': {'type': 'byte', 'length': 1},
+        'length': {'type': 'int', 'length': 4},
+        'payload': {'type': 'bytes', 'length': None},  # Length will be defined by the 'length' field
+        'checksum': {'type': 'byte', 'length': 1}
+    }
+
+    # Function to parse the packet based on the defined structure
+    def parse_packet(data):
+        offset = 0
+        parsed_data = {}
+
+        # Parse header
+        parsed_data['header'] = data[offset:offset + packet_structure['header']['length']]
+        offset += packet_structure['header']['length']
+
+        # Parse length
+        parsed_data['length'] = int.from_bytes(data[offset:offset + packet_structure['length']['length']], 'big')
+        offset += packet_structure['length']['length']
+
+        # Parse payload
+        parsed_data['payload'] = data[offset:offset + parsed_data['length']]
+        offset += parsed_data['length']
+
+        # Parse checksum
+        parsed_data['checksum'] = data[offset:offset + packet_structure['checksum']['length']]
+
+        return parsed_data
+
+    # Call the parse_packet function with the data
+    parsed_packet = parse_packet(data)
+    print('Parsed Packet:', parsed_packet)
+
     # Frequency Test
     freq_deviation = {char: freq - expected_frequency for char, freq in frequency.items()}
     print('Frequency Test Deviation:')
