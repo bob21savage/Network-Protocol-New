@@ -117,8 +117,8 @@ def analyze_data(data):
         parsed_data['payload'] = data[offset:offset + parsed_data['length']]
         offset += parsed_data['length']
 
-        # Parse checksum
-        parsed_data['checksum'] = int.from_bytes(data[offset:offset + packet_structure['checksum']['length']], 'big')
+        # Parse checksum (assuming it's the last byte of the packet)
+        parsed_data['checksum'] = data[offset:offset + packet_structure['checksum']['length']]
 
         return parsed_data
 
@@ -132,7 +132,7 @@ def analyze_data(data):
 
     # Calculate and validate the checksum
     calculated_checksum = calculate_checksum(parsed_packet['payload'])
-    if calculated_checksum == parsed_packet['checksum']:  # Assuming checksum is a single byte
+    if calculated_checksum == parsed_packet['checksum'][0]:  # Assuming checksum is a single byte
         print('Checksum is valid.')
     else:
         print('Checksum is invalid.')
