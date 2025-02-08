@@ -102,23 +102,93 @@ def analyze_data(data):
 
     # Function to parse the packet based on the defined structure
     def parse_packet(data):
+        print('Raw Data:', data)  # Print the raw data for debugging
         offset = 0
         parsed_data = {}
+
+        # Print raw data for debugging in a readable format
+        print('Raw data (hex):', data.hex())
 
         # Parse header
         parsed_data['header'] = data[offset:offset + packet_structure['header']['length']]
         offset += packet_structure['header']['length']
 
         # Parse length
-        parsed_data['length'] = int.from_bytes(data[offset:offset + packet_structure['length']['length']], 'big')
+        length_bytes = data[offset:offset + packet_structure['length']['length']]
+        print(f'Raw Length Bytes: {length_bytes} (hex: {length_bytes.hex()})')  # Print the raw length bytes before conversion
+        parsed_data['length'] = int.from_bytes(length_bytes, 'little')  # Change to little-endian
         offset += packet_structure['length']['length']
 
-        # Parse payload
-        parsed_data['payload'] = data[offset:offset + parsed_data['length']]
-        offset += parsed_data['length']
+        # Debugging information for length
+        print('Parsed Length:', parsed_data['length'])
+        print('Length Bytes (decimal):', int.from_bytes(length_bytes, 'big'))  # Print as decimal
+
+        # Check length in little-endian format
+        parsed_length_le = int.from_bytes(length_bytes, 'little')
+        print('Length Bytes (little-endian decimal):', parsed_length_le)
+
+        # Print the length bytes in context
+        print('Length Bytes in Context (hex):', data[offset - packet_structure['length']['length'] - packet_structure['header']['length']:offset + 10].hex())
+
+        # Print additional surrounding bytes for more context
+        print('Additional Surrounding Raw Data:', data[offset - 15:offset + 15].hex())
+
+        # Print the entire raw data for further inspection
+        print('Entire Raw Data:', data.hex())
+
+        # Check if the parsed length is valid
+        if parsed_data['length'] > len(data):
+            print('Error: Parsed length exceeds total data length. Check data structure.')
+            return parsed_data
+
+        # Debugging information before parsing payload
+        print('Debug Info:')
+        print(f'Parsed Length: {parsed_data["length"]}')
+        print(f'Offset: {offset}')
+        print(f'Total Data Length: {len(data)}')
+        print(f'Payload Start Offset: {offset}')
+        print(f'Payload End Offset: {offset + parsed_data["length"]}')
+        print(f'Payload Length: {parsed_data["length"]}')
+        print(f'Payload Slice: {data[offset:offset + parsed_data["length"]]}')
+
+        # Check if the offset plus length exceeds data length
+        if offset + parsed_data['length'] > len(data):
+            print('Error: Attempting to access payload beyond data length. Adjust length or input data.');
+            return parsed_data
+
+        # Check the validity of the parsed length before parsing the payload
+        print(f'Offset: {offset}, Total Data Length: {len(data)}')  # Print offset and total data length
+        print(f'Offset Before Payload: {offset}')  # Print offset before payload
+        print(f'Total Data Length Before Payload: {len(data)}')  # Print total data length before payload
+        print(f'Offset Before Payload (hex): {offset:x}')  # Print offset before payload in hex
+        print(f'Total Data Length Before Payload (hex): {len(data):x}')  # Print total data length before payload in hex
+        if parsed_data['length'] <= 0 or parsed_data['length'] > len(data) - offset:
+            print(f"Error: Invalid payload length {parsed_data['length']} at offset {offset}.")
+            return parsed_data
+
+        try:
+            # Parse payload
+            parsed_data['payload'] = data[offset:offset + parsed_data['length']]
+            offset += parsed_data['length']
+
+            # Debugging information
+            print('Parsed Data:', parsed_data)  # Print the entire parsed_data dictionary
+            print('Parsed Data After Payload:', parsed_data)  # Print the entire parsed_data dictionary after parsing payload
+            print('Entire Parsed Data Dictionary:', parsed_data)  # Print the entire parsed_data dictionary
+        except IndexError as e:
+            print(f"Error: {e}. Check data structure and length.")
+            return parsed_data
+
+        # Debugging information for offset and lengths
+        print('Offset before parsing checksum:', offset)
+        print('Total data length:', len(data))
+        print('Expected packet length including checksum:', parsed_data['length'] + packet_structure['header']['length'] + packet_structure['length']['length'] + packet_structure['checksum']['length'])
 
         # Parse checksum (assuming it's the last byte of the packet)
         parsed_data['checksum'] = data[offset:offset + packet_structure['checksum']['length']]
+
+        # Debugging information
+        print('Parsed Packet:', parsed_data)
 
         return parsed_data
 
