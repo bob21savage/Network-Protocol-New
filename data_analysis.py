@@ -8,6 +8,19 @@ import seaborn as sns
 data = '3=U³\\¬¶6|cò\\u000fã£Ü\\u001bn>]UãÊOM³YWl®cÕ\\u0017«ÔñqZ­ÓZÖø\\u005cæ\\u0017ÙGµZ.ôSv²­5\\u001f;ÌÍ¸Õ\'Ö<\\u001eYã.ËôðâøxãµtøªÓ3/VÍÆµrÜfÚczlzjÎvfñfÎÔO\\u00177iËG§tÍ£=ðÙ\\u0017ì±º+¼=êqÇV\\u005cG«ig\']+>geµÜñ\\u001e¶±§ÊÚx|<Í¸|¥ìáÚ.é\\u001bn£³¦]véeô<y¸ãÉã\\u001dò>Ö\\u001e¼Æv\'§êÌvtn6Ó¥³læ:µl\'>jélOfÇ7ÉkÌWÔ\\u001fSÕå\'§\\u001e\\u001fÉ®\\u001b§\\u001bnáx;Åô¥¶gu¦­ÊÍcÓÖÑ©¹ð¶KêÊ>\\u001b;9«ª|K¹\\u001eÜ£;.¶ÅWðø´Ü£Õæxs\\u005c®\\u005cìÌuÑÓimn²\\u001f6Ö\\u005c]VÓ¬êÆôðkcm\\u005cÚ¦|iv\\u001døUOK³.>xm6vf¹en²vMñ.OSkS:sM¶´\\u001f<;ð;\\u001e[q;67Myj]VÚcz²µM§Å³±¬O+òtm3­¦©ÓGn9y<ÇZ;\\u001eÅÚ>ÑÓØ²¹\\u001eÚY/Gãð³\\u001by£zÒÎNµxø\\u005c­Uám\\u001eÕVÎº67.z¼rÜc¹l³ÒñãNÎ³.Çfº9ñâ®l±¶<¶GÙ\\u0017§isêÚ¦øt«¥/él7:Õ¸ñ5>lñ[3æØ|SnGÑµ:>â;Ôj>-<WGN|¥W5uSã©mZømÇ3­S[¥v+m²¼VUìrÕxãYÙMWìc>3ÖØø¬Õ+Ó\\u001bmZÙÃ\\u001dØÍc«9ñæVËÌW<ÕY³:êqéiGÓ\\u005cÜéÖZgSÙNéÌnÌ=qø®ÃÓ6^<\\u0017ÍK[¥å\\u001dæÔWSs:®jvÊ^j«:ÍGñSåÑ[\\u005cÕ^\\u001b^¦Ú\\u000fÇrÇSÚ´yqì\\u001dã´yÉµ+>^j]Ysé¼ä;£­ZÇzrãV/ÅÓNvM«Ëi].§±;:ñ6Í¬ô-ºÅò±WÌ^Åy:Nvè­\\u000f¼cÖ5^ª\\u001f-ÖY=KñGÓ-Õ´ØUnÑ¶ªòÔôr¼<«.W5åm¥|Ñãª>fòØ7âñM§9^\\u000f^Åã±|eêÑÓr;¬ôV[SÇtÇ5znµ:7Mnq\\u001f6|ÆÍæK¹xã¸]+³NÇ£áñcÙÆìÊ[yK¼Nãx;¶[ÙÌkâ³\\u001eÅÜ´]-[Îr­Sò\\u001f\'>Ã|:mÆ|²ÉØ«£Ü£¶´Ír§3Ç<¶xñÊ­¦/âê<ôVµÒ/Mu+òØ§ªyj¹KÕfná|\\u001e­t\\u001flkÅkzNôÚtÌÔêjøÃËVu´uÌÙ|¼èêèÜ´mé¦«£ºqì¸¹+ÖèÜG\\u000fÜèË\\u001b\\u001bºxvÑg´OxËÒ\\u001f<[MÚô¥zÑ/âÖÑ­MæU­Y|5µ6¶xÓ©\\u001e³â®ä|Zg/á§rW©§\\u005cÙØ|ªn-Õª>MÇÑ/ªµtÎr¶Ø\\u001fâò[Ô\\u001f­iÇä³­´­µÖÌn¬mø3s3|jå¼É§\\u001bu¥ø©Oz<7|ÃÓf®\\u001bø\\u001bê3g.Ó±.¼eueô©ñg\\u001dÜ±ÚjWÆ7ry-ê²/Ìê+ÜÔ\\u001fìf[ðÍSåØ¼Ü±åeéWjOÃOÒÊ7è]Æ6­ÕØº6s;ÃñGË±éMãKºZæÚ\\u001e¹GêU\\u001f|èrv¸vqÖVô9nnÆè\\u001fÅ\\u001fKºµ¬º\\u001eµð/KW9ÙjÎU6ìÉ\\u001f\\u001eÕG;èÜi¼\\u001e^ávÃ¹£=¥3Ü3ktytºKÎòtÓ\\u000fº:^-µÑåfµYváòONO-ÙUµÆË3µ±¶©n<§ò'
 
 def analyze_data(data):
+    # Validate input data
+    if not data:
+        print('Error: Input data is empty. Please provide valid data.')
+        return None
+
+    # Convert to bytes if data is a string
+    if isinstance(data, str):
+        data = data.encode('latin-1')  # Convert to bytes using latin-1 encoding
+
+    # Debugging information before parsing length
+    print('Initial Data Length:', len(data))
+    print('Raw Data (hex):', data.hex())
+
     frequency = Counter(data)
     total_chars = sum(frequency.values())
     expected_frequency = total_chars / len(frequency)
@@ -105,91 +118,59 @@ def analyze_data(data):
         print('Raw Data:', data)  # Print the raw data for debugging
         offset = 0
         parsed_data = {}
-
+    
         # Print raw data for debugging in a readable format
         print('Raw data (hex):', data.hex())
-
+    
         # Parse header
         parsed_data['header'] = data[offset:offset + packet_structure['header']['length']]
         offset += packet_structure['header']['length']
-
-        # Parse length
-        length_bytes = data[offset:offset + packet_structure['length']['length']]
-        print(f'Raw Length Bytes: {length_bytes} (hex: {length_bytes.hex()})')  # Print the raw length bytes before conversion
-        parsed_data['length'] = int.from_bytes(length_bytes, 'little')  # Change to little-endian
-        offset += packet_structure['length']['length']
-
+    
+        # Print the header bytes
+        header_bytes = parsed_data['header']
+        print('Header Bytes (hex):', header_bytes.hex())
+        print('Full Data (hex):', data.hex())
+        print('Surrounding Data (hex):', data[max(0, offset - 10):offset + 10].hex())
+    
+        # Before extracting length
+        print('Current Offset before length extraction:', offset)
+    
+        # Parse length using a new method
+        length_bytes = data[offset:offset + 4]  # Read 4 bytes for the length
+        print('Raw Length Bytes:', length_bytes)  # Print the raw length bytes
+        print('Raw Length Bytes (hex):', length_bytes.hex())  # Print the raw length bytes in hex
+        parsed_length = int.from_bytes(length_bytes, 'big')  # Change to big-endian
+        print('Parsed Length (int):', parsed_length)  # Print the parsed length
+        print('Parsed Length (hex):', parsed_length.to_bytes(4, 'little').hex())  # Print the parsed length in hex
+        print('Parsed Length (bin):', bin(parsed_length))  # Print the parsed length in binary
+        print('Parsed Length (oct):', oct(parsed_length))  # Print the parsed length in octal
+        if parsed_length <= 0 or parsed_length > len(data) - offset:
+            print(f"Error: Invalid payload length {parsed_length} at offset {offset}.")
+            return parsed_data
+    
+        parsed_data['length'] = parsed_length
+        offset += 4
+    
         # Debugging information for length
         print('Parsed Length:', parsed_data['length'])
-        print('Length Bytes (decimal):', int.from_bytes(length_bytes, 'big'))  # Print as decimal
-
-        # Check length in little-endian format
-        parsed_length_le = int.from_bytes(length_bytes, 'little')
-        print('Length Bytes (little-endian decimal):', parsed_length_le)
-
-        # Print the length bytes in context
-        print('Length Bytes in Context (hex):', data[offset - packet_structure['length']['length'] - packet_structure['header']['length']:offset + 10].hex())
-
-        # Print additional surrounding bytes for more context
-        print('Additional Surrounding Raw Data:', data[offset - 15:offset + 15].hex())
-
-        # Print the entire raw data for further inspection
-        print('Entire Raw Data:', data.hex())
-
-        # Check if the parsed length is valid
-        if parsed_data['length'] > len(data):
-            print('Error: Parsed length exceeds total data length. Check data structure.')
-            return parsed_data
-
-        # Debugging information before parsing payload
-        print('Debug Info:')
-        print(f'Parsed Length: {parsed_data["length"]}')
-        print(f'Offset: {offset}')
-        print(f'Total Data Length: {len(data)}')
-        print(f'Payload Start Offset: {offset}')
-        print(f'Payload End Offset: {offset + parsed_data["length"]}')
-        print(f'Payload Length: {parsed_data["length"]}')
-        print(f'Payload Slice: {data[offset:offset + parsed_data["length"]]}')
-
-        # Check if the offset plus length exceeds data length
-        if offset + parsed_data['length'] > len(data):
-            print('Error: Attempting to access payload beyond data length. Adjust length or input data.');
-            return parsed_data
-
-        # Check the validity of the parsed length before parsing the payload
-        print(f'Offset: {offset}, Total Data Length: {len(data)}')  # Print offset and total data length
-        print(f'Offset Before Payload: {offset}')  # Print offset before payload
-        print(f'Total Data Length Before Payload: {len(data)}')  # Print total data length before payload
-        print(f'Offset Before Payload (hex): {offset:x}')  # Print offset before payload in hex
-        print(f'Total Data Length Before Payload (hex): {len(data):x}')  # Print total data length before payload in hex
-        if parsed_data['length'] <= 0 or parsed_data['length'] > len(data) - offset:
-            print(f"Error: Invalid payload length {parsed_data['length']} at offset {offset}.")
-            return parsed_data
-
+        print('Total Data Length:', len(data))
+        print('Offset:', offset)
+    
         try:
             # Parse payload
             parsed_data['payload'] = data[offset:offset + parsed_data['length']]
             offset += parsed_data['length']
-
+    
             # Debugging information
             print('Parsed Data:', parsed_data)  # Print the entire parsed_data dictionary
-            print('Parsed Data After Payload:', parsed_data)  # Print the entire parsed_data dictionary after parsing payload
-            print('Entire Parsed Data Dictionary:', parsed_data)  # Print the entire parsed_data dictionary
         except IndexError as e:
             print(f"Error: {e}. Check data structure and length.")
             return parsed_data
-
-        # Debugging information for offset and lengths
-        print('Offset before parsing checksum:', offset)
-        print('Total data length:', len(data))
-        print('Expected packet length including checksum:', parsed_data['length'] + packet_structure['header']['length'] + packet_structure['length']['length'] + packet_structure['checksum']['length'])
-
-        # Parse checksum (assuming it's the last byte of the packet)
+    
+        # Parse checksum
         parsed_data['checksum'] = data[offset:offset + packet_structure['checksum']['length']]
-
-        # Debugging information
         print('Parsed Packet:', parsed_data)
-
+    
         return parsed_data
 
     # Function to calculate checksum
@@ -201,11 +182,14 @@ def analyze_data(data):
     print('Parsed Packet:', parsed_packet)
 
     # Calculate and validate the checksum
-    calculated_checksum = calculate_checksum(parsed_packet['payload'])
-    if calculated_checksum == parsed_packet['checksum'][0]:  # Assuming checksum is a single byte
-        print('Checksum is valid.')
+    if 'payload' in parsed_packet:
+        calculated_checksum = calculate_checksum(parsed_packet['payload'])
+        if calculated_checksum == parsed_packet['checksum'][0]:  # Assuming checksum is a single byte
+            print('Checksum is valid.')
+        else:
+            print('Checksum is invalid.')
     else:
-        print('Checksum is invalid.')
+        print('Error: Payload not found in parsed packet.')
 
     # Frequency Test
     freq_deviation = {char: freq - expected_frequency for char, freq in frequency.items()}
