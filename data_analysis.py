@@ -20,8 +20,8 @@ def analyze_data(data):
     # Print the actual byte values of the first few bytes of the data
     print('Actual byte values of the first few bytes:', data[:20])  
 
-    # Define a new custom magic number based on the actual byte values observed
-    custom_magic_number = b'3=U\xb3\xac\xb66|c\xf2\x0f\xe3\xa3\xdc'  
+    # Update the custom magic number to match the expected format
+    custom_magic_number = b'3=U\xb3\xac\xb66|c\xf2\x0f\xe3\xa3\xdc'  # Ensure this matches the expected header
 
     # Ensure data is in bytes format
     if isinstance(data, str):
@@ -122,9 +122,20 @@ def analyze_data(data):
 
         return parsed_data
 
+    # Function to calculate checksum
+    def calculate_checksum(data):
+        return sum(data) % 256  # Simple checksum calculation (mod 256)
+
     # Call the parse_packet function with the data
     parsed_packet = parse_packet(data)
     print('Parsed Packet:', parsed_packet)
+
+    # Calculate and validate the checksum
+    calculated_checksum = calculate_checksum(parsed_packet['payload'])
+    if calculated_checksum == parsed_packet['checksum'][0]:  # Assuming checksum is a single byte
+        print('Checksum is valid.')
+    else:
+        print('Checksum is invalid.')
 
     # Frequency Test
     freq_deviation = {char: freq - expected_frequency for char, freq in frequency.items()}
