@@ -1,3 +1,4 @@
+just as a option for this data i would have to say my code already uses custom encryption didn't read the site yet cause i was thinking that is a example would have to do with what I'm trying but the thought of this level of making data is ridicules and the effort that takes is beyond me so with that said I am lost at the moment and it is a new algorithm if someone has the know how please look into custom format code that i made they are rarely published the data looks to be a new way of coding network related stuff already on internet and you can have that transcribed after you analyze the packets the coding is unique 
 python app.py
 python data_analysis.py
 pip install -r "c:\Users\bpier\Desktop\random data\requirements.txt"
