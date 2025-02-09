@@ -11,38 +11,64 @@ def analyze_data(data):
     # Validate input data
     if not data:
         print('Error: Input data is empty. Please provide valid data.')
-        return None
+        return
 
     # Convert to bytes if data is a string
     if isinstance(data, str):
         data = data.encode('latin-1')  # Convert to bytes using latin-1 encoding
 
-    # Debugging information before parsing length
-    print('Initial Data Length:', len(data))
-    print('Raw Data (hex):', data.hex())
+    print('Initial Data Length:', len(data))  # Log the initial length of the data
+    print('Raw Data (hex):', data.hex())  # Log the raw data in hex
 
+    # Frequency analysis
     frequency = Counter(data)
+    print('Character Frequency:', frequency)
+
+    # Analyze the structure of the raw data
+    header = data[0:1]  # Read the header byte
+    print('Header:', header)  # Log the header byte
+
+    # Check if the header matches expected values
+    if header != b'3':  # Assuming '3' is a valid header
+        print(f'Warning: Unexpected header value: {header}')  # Log warning for unexpected header
+
+    # Investigate the length field
+    length_bytes = data[1:5]  # Assuming length is in the next 4 bytes
+    print('Raw Length Bytes:', length_bytes)  # Log length bytes
+    parsed_length = int.from_bytes(length_bytes, 'big')  # Read as big-endian
+    print('Parsed Length (int):', parsed_length)  # Log parsed length
+
+    # Check for anomalies in the parsed length
+    if parsed_length <= 0 or parsed_length > len(data) - 5:
+        print(f'Error: Invalid payload length {parsed_length} at offset 1.')  # Log error for invalid length
+    else:
+        print('Valid payload length detected.')  # Log valid length detection
+
+    # Extract payload if valid length
+    if parsed_length > 0 and parsed_length <= len(data) - 5:
+        payload = data[5:5 + parsed_length]  # Extract the payload
+        print('Extracted Payload:', payload)  # Log the payload
+    else:
+        print('Payload extraction skipped due to invalid length.')
+
+    # Additional diagnostics
+    print('Surrounding Data (hex):', data[max(0, 1 - 10):5 + parsed_length + 10].hex())  # Log surrounding data for context
+
+    # Implement searching for specific patterns
+    search_for_pattern(data, b'3=U')  # Example pattern to search for
+
+    # Entropy calculation
     total_chars = sum(frequency.values())
     expected_frequency = total_chars / len(frequency)
     entropy = -sum((freq / total_chars) * math.log2(freq / total_chars) for freq in frequency.values())
     print('Entropy:', entropy)
-    print('Character Frequency:')
-    for char, freq in frequency.items():
-        print(f'{char}: {freq}')
 
     # Print the actual byte values of the first few bytes of the data
     print('Actual byte values of the first few bytes:', data[:20])  
 
-    # Update the custom magic number to match the expected format
-    custom_magic_number = b'3=U\xb3\xac\xb66|c\xf2\x0f\xe3\xa3\xdc'  # Ensure this matches the expected header
-
-    # Ensure data is in bytes format
-    if isinstance(data, str):
-        data = data.encode('latin-1')  # Convert to bytes using latin-1 encoding
-
     # Check if the first few bytes match the custom magic number
+    custom_magic_number = b'3=U\xb3\xac\xb66|c\xf2\u000f\xe3\xa3\xdc'  # Ensure this matches the expected header
     print('Checking for custom magic number...')
-    print('Actual byte values of the first few bytes:', data[:20])
     if data.startswith(custom_magic_number):
         print('File format identified: Custom File Format')
     else:
@@ -237,6 +263,12 @@ def analyze_data(data):
     plt.ylabel('Entropy')
     plt.grid()
     plt.show()
+
+def search_for_pattern(data, pattern):
+    if pattern in data:
+        print(f'Pattern {pattern} found in data.')
+    else:
+        print(f'Pattern {pattern} not found in data.')
 
 # Call the analyze_data function
 analyze_data(data)
